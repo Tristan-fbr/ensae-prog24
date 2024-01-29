@@ -53,17 +53,16 @@ class Grid():
         """
         return f"<grid.Grid: m={self.m}, n={self.n}>"
 
-    def is_sorted(self):
+    def is_sorted(self, m, n, state):
         """
         Checks is the current state of the grid is sorte and returns the answer as a boolean.
         """
         for i in range (m):
             for j in range (n):
-                if state[i][j]:
+                if state[i][j] == i*n + j:
                     nb_de_cases_bonnes =+ 1
                     if nb_de_cases_bonnes == n*m:
                         return True
-                    
     def swap(self, cell1, cell2):
         """
         Implements the swap operation between two cells. Raises an exception if the swap is not allowed.
