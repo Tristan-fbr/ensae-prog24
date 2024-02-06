@@ -3,7 +3,8 @@ from grid import Grid
 g = Grid(2, 3)
 print(g)
 
-data_path = "../input/"
+data_path = "C:/Users/cfrou/OneDrive/Bureau/Projet programmation/ensae-prog24/input/"
+#attention : depuis le copier-coller du chemin du fichier, on a des antislashs au lieu de slashs
 file_name = data_path + "grid0.in"
 
 print(file_name)
