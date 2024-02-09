@@ -88,6 +88,7 @@ class Grid():
                 self.state[cell1[0]][cell1[1]]=self.state[cell2[0]][cell2[1]]
                 self.state[cell2[0]][cell2[1]] = int_cell1
                 error=0
+        #in case the swap is not allowed
         if error == 1: 
             raise Exception("Swap not allowed")
 
