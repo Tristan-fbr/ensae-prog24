@@ -1,4 +1,5 @@
 from grid import Grid
+from solver import Solver
 
 g = Grid(2, 3)
 print(g)

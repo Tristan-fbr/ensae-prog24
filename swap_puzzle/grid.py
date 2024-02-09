@@ -53,18 +53,18 @@ class Grid():
         """
         return f"<grid.Grid: m={self.m}, n={self.n}>"
 
-    def is_sorted(self, m, n, state):
+    def is_sorted(self):
         """
         Checks is the current state of the grid is sorte and returns the answer as a boolean.
         """
-        for i in range (m):
-            for j in range (n):
-                if state[i][j] == i*n + j:
+        for i in range (self.m):
+            for j in range (self.n):
+                if self.state[i][j] == i*self.n + j:
                     nb_de_cases_bonnes =+ 1
-                    if nb_de_cases_bonnes == n*m:
+                    if nb_de_cases_bonnes == self.n*self.m:
                         return True
                     
-    def swap(self, cell1, cell2, state):
+    def swap(self, cell1, cell2):
         """
         Implements the swap operation between two cells. Raises an exception if the swap is not allowed.
 
@@ -73,9 +73,26 @@ class Grid():
         cell1, cell2: tuple[int]
             The two cells to swap. They must be in the format (i, j) where i is the line and j the column number of the cell. 
         """
-        nbr_cell1 = state[cell1[0]][cell1[1]]
-        state[cell1[0]][cell1[1]]=state[cell2[0]][cell2[1]]
-        state[cell2[0]][cell2[1]] = nbr_cell1
+        error=1
+        #first allowed swap : same line, adjacent columns
+        if cell1[0] == cell2[0]:
+            if cell1[1]==cell2[2]+1 or cell1[1]==cell2[2]-1:
+                int_cell1 = self.state[cell1[0]][cell1[1]]
+                self.state[cell1[0]][cell1[1]]=self.state[cell2[0]][cell2[1]]
+                self.state[cell2[0]][cell2[1]] = int_cell1
+                error=0
+        #second allowed swap : adjacent lines, same column
+        elif cell1[0]==cell2[0]+1 or cell1[0]==cell2[0]-1:
+            if cell1[1]==cell2[1]:
+                int_cell1 = self.state[cell1[0]][cell1[1]]
+                self.state[cell1[0]][cell1[1]]=self.state[cell2[0]][cell2[1]]
+                self.state[cell2[0]][cell2[1]] = int_cell1
+                error=0
+        if error == 1: 
+            raise Exception("Swap not allowed")
+
+
+
 
     def swap_seq(self, cell_pair_list, state):
         """
