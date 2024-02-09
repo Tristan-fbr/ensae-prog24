@@ -94,7 +94,7 @@ class Grid():
 
 
 
-    def swap_seq(self, cell_pair_list, state):
+    def swap_seq(self, cell_pair_list):
         """
         Executes a sequence of swaps. 
 
@@ -107,7 +107,7 @@ class Grid():
         for element in cell_pair_list:
             cell1 = element[0] 
             cell2 = element[1]
-            swap(cell1, cell2, state)
+            Grid.swap(cell1, cell2)
 
     @classmethod
     def grid_from_file(cls, file_name): 
