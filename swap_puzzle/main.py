@@ -3,8 +3,8 @@ from solver import Solver
 
 g = Grid(2, 3)
 print(g)
-
-
+Grid.swap(g, (0,2), (1,2))
+print(g)
 
 
 

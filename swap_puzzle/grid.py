@@ -80,7 +80,7 @@ class Grid():
         error=1
         #first allowed swap : same line, adjacent columns
         if cell1[0] == cell2[0]:
-            if cell1[1]==cell2[2]+1 or cell1[1]==cell2[2]-1:
+            if cell1[1]==cell2[1]+1 or cell1[1]==cell2[1]-1:
                 int_cell1 = self.state[cell1[0]][cell1[1]]
                 self.state[cell1[0]][cell1[1]]=self.state[cell2[0]][cell2[1]]
                 self.state[cell2[0]][cell2[1]] = int_cell1
