@@ -3,7 +3,7 @@ from solver import Solver
 
 g = Grid(2, 3)
 print(g)
-Grid.swap(g, (0,2), (1,2))
+Grid.swap_seq(g, [((0,2), (1,2)),((0,2), (0,1))])
 print(g)
 
 

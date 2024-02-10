@@ -112,7 +112,7 @@ class Grid():
         for element in cell_pair_list:
             cell1 = element[0] 
             cell2 = element[1]
-            Grid.swap(cell1, cell2)
+            Grid.swap(self, cell1, cell2)
 
     def graphic_rep(self):
         #defines the grid : number of columns, number of lines
