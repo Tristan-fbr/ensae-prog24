@@ -112,17 +112,18 @@ class Grid():
             Grid.swap(cell1, cell2)
 
     def graphic_rep(self):
+        #defines the grid : number of columns, number of lines
         fig, ax = plt.subplots()
         ax.set_xticks(range(self.n+1))
         ax.set_yticks(range(self.m+1))
         ax.grid()
 
-        for i in range(1, m+1):
-            for j in range(1, n+1):
-                ax.text(j-0.5, i-0.5, str((i-1)*n + j), ha='center', va='center')
+        #fills in the cells of the grid
+        for i in range(1, self.m+1):
+            for j in range(1, self.n+1):
+                ax.text(j-0.5, self.m-i+0.5, str(self.state[i-1][j-1]))
 
-        ax.set_xlim(0, self.n)
-        ax.set_ylim(0, self.m)
+        #shows the grid
         ax.set_aspect('equal')
         plt.show()
 
