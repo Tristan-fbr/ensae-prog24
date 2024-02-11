@@ -4,6 +4,15 @@ This is the grid module. It contains the Grid class and its associated methods.
 
 import random
 import matplotlib.pyplot as plt
+from copy import deepcopy
+
+
+#transforms a list into a tuple (a hashable object)
+def list_to_tuple(liste):
+    tuple_result = []
+    for inner_list in liste:
+        tuple_result.append(tuple(inner_list))
+    return tuple(tuple_result)
 
 class Grid():
     """
@@ -19,6 +28,7 @@ class Grid():
         The state of the grid, a list of list such that state[i][j] is the number in the cell (i, j), i.e., in the i-th line and j-th column. 
         Note: lines are numbered 0..m and columns are numbered 0..n.
     """
+    
     
     def __init__(self, m, n, initial_state = []):
         """
@@ -58,7 +68,6 @@ class Grid():
         """
         Checks is the current state of the grid is sorte and returns the answer as a boolean.
         """
-        print(self.state)
         nb_right_cells=0
         for i in range (0, self.m):
             for j in range (0, self.n):
@@ -83,6 +92,11 @@ class Grid():
             The two cells to swap. They must be in the format (i, j) where i is the line and j the column number of the cell. 
         """
         error=1
+        if cell1[0] < 0 or cell2[0] < 0 :
+            raise Exception("One cell does not exist")
+        if cell1[1] < 0 or cell2[1] < 0 :
+            raise Exception("One cell does not exist")
+
         #first allowed swap : same line, adjacent columns
         if cell1[0] == cell2[0]:
             if cell1[1]==cell2[1]+1 or cell1[1]==cell2[1]-1:
@@ -163,4 +177,71 @@ class Grid():
             grid = Grid(m, n, initial_state)
         return grid
 
+
+    def get_grid_swap_case(self, i,j):
+
+        """fonctionne avec la méthode suivante, les deux renvoient une liste de grilles, donc d'attributs m, n, state"""
+
+        resultat_swap_case=[]
+        try:
+            self.swap((i,j),(i+1,j))
+            new_grid = Grid(self.m, self.n, initial_state=deepcopy(self.state))
+            resultat_swap_case.append(new_grid)
+            self.swap((i,j),(i+1,j))
+        except:
+            pass
+
+        try:
+            self.swap((i,j),(i,j+1))
+            new_grid = Grid(self.m, self.n, initial_state=deepcopy(self.state))
+            resultat_swap_case.append(new_grid)
+            self.swap((i,j),(i,j+1))
+        except:
+            pass
+
+        try:
+            self.swap((i,j),(i-1,j))
+            new_grid = Grid(self.m, self.n, initial_state=deepcopy(self.state))
+            resultat_swap_case.append(new_grid)
+            self.swap((i,j),(i-1,j))
+        except:
+            pass
+
+
+        try:
+            self.swap((i,j),(i,j-1))
+            new_grid = Grid(self.m, self.n, initial_state=deepcopy(self.state))
+            resultat_swap_case.append(new_grid)
+            self.swap((i,j),(i,j-1))
+        except:
+            pass
+
+        return resultat_swap_case
+    
+    def get_grid_all_swaps(self):
+        resultat_all_swaps=[]
+        for i in range(self.m):
+            for j in range(self.n):
+                for elt in self.get_grid_swap_case(i,j):
+                    resultat_all_swaps.append(elt)
+        return(resultat_all_swaps)
+    
+
+
+    def dict(self):
+        to_be_seen=[self]
+        dict_all={}
+        while to_be_seen != []:
+            current = to_be_seen.pop(0)
+            all_neighbors= Grid.get_grid_all_swaps(current)
+            tuple_neighbors = []
+            for element in all_neighbors:
+                tuple_neighbors.append(list_to_tuple(element.state))
+            dict_all[list_to_tuple(current.state)] = tuple_neighbors
+            for elt in all_neighbors:
+                if elt not in to_be_seen and list_to_tuple(elt.state) not in dict_all.keys():
+                    to_be_seen.append(elt)
+        return(dict_all)
+
+    
 

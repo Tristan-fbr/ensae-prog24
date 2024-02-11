@@ -1,6 +1,13 @@
 """
 This is the graph module. It contains a minimalistic Graph class.
 """
+from grid import Grid
+
+def list_to_tuple(liste):
+    tuple_result = []
+    for inner_list in liste:
+        tuple_result.append(tuple(inner_list))
+    return tuple(tuple_result)
 
 class Graph:
     """
@@ -22,7 +29,7 @@ class Graph:
         The list of all edges
     """
 
-    def __init__(self, nodes=[]):
+    def __init__(self, dict):
         """
         Initializes the graph with a set of nodes, and no edges. 
 
@@ -31,11 +38,9 @@ class Graph:
         nodes: list, optional
             A list of nodes. Default is empty.
         """
-        self.nodes = nodes 
-        self.graph = dict([(n, []) for n in nodes])
-        self.nb_nodes = len(nodes)
-        self.nb_edges = 0
-        self.edges = []
+
+        self.graph = dict
+
         
     def __str__(self):
         """
@@ -81,7 +86,7 @@ class Graph:
         self.nb_edges += 1
         self.edges.append((node1, node2))
 
-    def bfs(self, src, dst): 
+    def bfs(self, a, b): 
         """
         Finds a shortest path from src to dst by BFS.  
 
@@ -97,6 +102,8 @@ class Graph:
         path: list[NodeType] | None
             The shortest path from src to dst. Returns None if dst is not reachable from src
         """ 
+        src = list_to_tuple(a)
+        dst = list_to_tuple(b)
         path = []
         file = [src]
         marked = []
@@ -126,16 +133,40 @@ class Graph:
         active = dst
         inverse_path = []
         while active != src : 
-            inverse_path.append(dict[active])
+            inverse_path.append((dict[active], active))
             active = dict[active]
         return inverse_path
 
+    def efficient_bfs(self, m, n, a):  
+        src = list_to_tuple(a)      
+        path = []
+        file = [src]
+        marked = []
+        parents = {src : -1}
+        dst = list_to_tuple([list(range(i*n+1, (i+1)*n+1)) for i in range(m)])
 
+        while file != []:
+            current = file[0]
+            grid_neighbors = Grid.get_grid_all_swaps(current)
+            all_neighbors = []
+            for element in grid_neighbors:
+                all_neighbors.append(Grid.element.state)
+            for element in all_neighbors:
+                if element not in file :
+                    if element not in marked : 
+                        file.append(element)
+                        parents[element] = current
+                if element == dst : 
+                    inverse_path = Graph.get_back_path(self, element, src, parents)
+            marked.append(current)
+            file.pop(0)
+            
+        if inverse_path != []:
+            path = inverse_path[::-1]
+            return path
+        else : 
+            return None
 
-
-
-        # TODO: implement this function (and remove the line "raise NotImplementedError").
-        raise NotImplementedError
 
     @classmethod
     def graph_from_file(cls, file_name):
