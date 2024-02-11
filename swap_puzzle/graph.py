@@ -97,6 +97,43 @@ class Graph:
         path: list[NodeType] | None
             The shortest path from src to dst. Returns None if dst is not reachable from src
         """ 
+        path = []
+        file = [src]
+        marked = []
+        parents = {src : -1}
+
+        while file != []:
+            current = file[0]
+            all_neighbors = self.graph[current]
+            for element in all_neighbors:
+                if element not in file :
+                    if element not in marked : 
+                        file.append(element)
+                        parents[element] = current
+                if element == dst : 
+                    inverse_path = Graph.get_back_path(self, element, src, parents)
+            marked.append(current)
+            file.pop(0)
+            
+        if inverse_path != []:
+            path = inverse_path[::-1]
+            return path
+        else : 
+            return None
+        
+    
+    def get_back_path(self, dst, src, dict):
+        active = dst
+        inverse_path = []
+        while active != src : 
+            inverse_path.append(dict[active])
+            active = dict[active]
+        return inverse_path
+
+
+
+
+
         # TODO: implement this function (and remove the line "raise NotImplementedError").
         raise NotImplementedError
 
