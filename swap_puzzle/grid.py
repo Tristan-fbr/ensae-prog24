@@ -58,15 +58,20 @@ class Grid():
         """
         Checks is the current state of the grid is sorte and returns the answer as a boolean.
         """
+        print(self.state)
         nb_right_cells=0
-        for i in range (self.m):
-            for j in range (self.n):
+        for i in range (0, self.m):
+            for j in range (0, self.n):
+                """print("i, j", i, j)
+                print("contenu, attendu", self.state[i][j], i*self.n + j + 1)"""
                 if self.state[i][j] == i*self.n + j + 1:
                     nb_right_cells = nb_right_cells+ 1
+                    #print("nb", nb_right_cells)
         if nb_right_cells == self.n*self.m:
             return True
         else :
             return False
+        
                     
     def swap(self, cell1, cell2):
         """
