@@ -86,7 +86,7 @@ class Graph:
         self.nb_edges += 1
         self.edges.append((node1, node2))
 
-    def bfs(self, a, b): 
+    def bfs(self, state_src_grid, state_dst_grid): 
         """
         Finds a shortest path from src to dst by BFS.  
 
@@ -102,8 +102,8 @@ class Graph:
         path: list[NodeType] | None
             The shortest path from src to dst. Returns None if dst is not reachable from src
         """ 
-        src = list_to_tuple(a)
-        dst = list_to_tuple(b)
+        src = list_to_tuple(state_src_grid)
+        dst = list_to_tuple(state_dst_grid)
         path = []
         file = [src]
         marked = []

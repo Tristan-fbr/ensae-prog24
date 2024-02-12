@@ -230,7 +230,8 @@ class Grid():
     
 
 """this function creates a dictionary that takes a grid as its key 
-a grid and associates with it, as a list of values, the set of its neighbors"""
+    a grid and associates with it, as a list of values, the set of its neighbors"""
+    
     def dict(self):
         to_be_seen=[self]
         dict_all={}
