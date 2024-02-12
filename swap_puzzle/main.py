@@ -11,8 +11,8 @@ print(g)
 #print(g)
 graph = Grid.dict(g)
 i = Graph(graph)
-print(Graph.bfs(i, g.state, aim.state))
-print(Graph.efficient_bfs(i, 3, 1, g.state))
+#print(Graph.bfs(i, g.state, aim.state))
+print(Graph.efficient_bfs(i, g))
 
 
 

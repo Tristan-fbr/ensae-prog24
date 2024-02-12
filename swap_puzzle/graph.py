@@ -130,42 +130,43 @@ class Graph:
         
     
     def get_back_path(self, dst, src, dict):
+        print(dict)
+        print(src)
+        print(dst)
         active = dst
         inverse_path = []
         while active != src : 
+            print(active)
             inverse_path.append((dict[active], active))
             active = dict[active]
         return inverse_path
 
-    def efficient_bfs(self, m, n, a):  
-        src = list_to_tuple(a)      
+    def efficient_bfs(self, src):  
         path = []
-        file = [src]
-        marked = []
-        parents = {src : -1}
+        file = [src] #list of grids
+        marked = [] #list of grids
+        parents = {list_to_tuple(src.state) : -1} #dict of tuples
+        m = src.m
+        n = src.n
         dst = list_to_tuple([list(range(i*n+1, (i+1)*n+1)) for i in range(m)])
 
         while file != []:
             current = file[0]
             grid_neighbors = Grid.get_grid_all_swaps(current)
-            all_neighbors = []
             for element in grid_neighbors:
-                all_neighbors.append(Grid.element.state)
-            for element in all_neighbors:
                 if element not in file :
                     if element not in marked : 
                         file.append(element)
-                        parents[element] = current
-                if element == dst : 
-                    inverse_path = Graph.get_back_path(self, element, src, parents)
+                        parents[list_to_tuple(element.state)] = list_to_tuple(current.state)
+                if list_to_tuple(element.state) == dst : 
+                    inverse_path = Graph.get_back_path(self, list_to_tuple(element.state), list_to_tuple(src.state), parents)
+                    if inverse_path != []:
+                        path = inverse_path[::-1]
+                        return path            
             marked.append(current)
             file.pop(0)
-            
-        if inverse_path != []:
-            path = inverse_path[::-1]
-            return path
-        else : 
-            return None
+        return None
+        
 
 
     @classmethod
