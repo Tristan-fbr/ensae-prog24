@@ -229,7 +229,7 @@ class Grid():
         return(resultat_all_swaps)
     
 
-"""this function creates a dictionary that takes a grid as its key 
+    """this function creates a dictionary that takes a grid as its key 
     a grid and associates with it, as a list of values, the set of its neighbors"""
     
     def dict(self):
@@ -245,7 +245,6 @@ class Grid():
             for elt in all_neighbors:
                 if elt not in to_be_seen and list_to_tuple(elt.state) not in dict_all.keys():
                     to_be_seen.append(elt)
-        return(dict_all)
+        return dict_all
 
     
-

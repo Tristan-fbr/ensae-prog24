@@ -119,14 +119,11 @@ class Graph:
                         parents[element] = current
                 if element == dst : 
                     inverse_path = Graph.get_back_path(self, element, src, parents)
+                    path = inverse_path[::-1]
+                    return path
             marked.append(current)
             file.pop(0)
-            
-        if inverse_path != []:
-            path = inverse_path[::-1]
-            return path
-        else : 
-            return None
+        return None
         
     
     def get_back_path(self, dst, src, dict):
