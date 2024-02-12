@@ -166,3 +166,56 @@ class Graph:
                     raise Exception("Format incorrect")
         return graph
 
+
+    def distance_grid(self):
+        nb_movement=0
+        distance=0
+        for i in range(self.n):
+            for j in range(self.m):
+                if self.state[i][j]% self.m == 0:
+                    true_place_i = self.state[i][j]//self.m - 1
+                    true_place_j = self.m -1
+                else:
+                    true_place_i = self.state[i][j]// self.m
+                    true_place_j = self.state[i][j]% self.m - 1
+                if self.state[i][j] == i*self.n + j + 1:
+                    nb_movement = 0
+                else:
+                    nb_movement= abs(i-true_place_i) + abs(j-true_place_j)
+                distance = distance + nb_movement
+        return distance
+
+"""code pour tester la fonction distance:
+new_grid = Grid(3,3)
+print(new_grid)
+new_grid.swap((1,1),(1,2))
+new_grid.swap((1,2),(2,2))
+new_grid.swap((0,1),(0,0))
+new_grid.swap((1,0),(1,1))
+new_grid.swap((2,2),(1,2))
+new_grid.swap((1,1),(2,1))
+new_grid.swap((1,1),(0,1))
+new_grid.swap((2,0),(2,1))
+new_grid.swap((2,2),(2,1))
+print(new_grid)
+print(new_grid.distance_grid())"""
+
+
+
+
+ def is_sorted(self):
+        """
+        Checks is the current state of the grid is sorte and returns the answer as a boolean.
+        """
+        nb_right_cells=0
+        for i in range (0, self.m):
+            for j in range (0, self.n):
+                """print("i, j", i, j)
+                print("contenu, attendu", self.state[i][j], i*self.n + j + 1)"""
+                if self.state[i][j] == i*self.n + j + 1:
+                    nb_right_cells = nb_right_cells+ 1
+                    #print("nb", nb_right_cells)
+        if nb_right_cells == self.n*self.m:
+            return True
+        else :
+            return False
