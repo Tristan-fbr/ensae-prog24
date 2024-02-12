@@ -199,23 +199,3 @@ new_grid.swap((2,0),(2,1))
 new_grid.swap((2,2),(2,1))
 print(new_grid)
 print(new_grid.distance_grid())"""
-
-
-
-
- def is_sorted(self):
-        """
-        Checks is the current state of the grid is sorte and returns the answer as a boolean.
-        """
-        nb_right_cells=0
-        for i in range (0, self.m):
-            for j in range (0, self.n):
-                """print("i, j", i, j)
-                print("contenu, attendu", self.state[i][j], i*self.n + j + 1)"""
-                if self.state[i][j] == i*self.n + j + 1:
-                    nb_right_cells = nb_right_cells+ 1
-                    #print("nb", nb_right_cells)
-        if nb_right_cells == self.n*self.m:
-            return True
-        else :
-            return False
