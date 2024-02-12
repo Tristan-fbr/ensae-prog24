@@ -60,48 +60,10 @@ class Graph:
         """
         return f"<graph.Graph: nb_nodes={self.nb_nodes}, nb_edges={self.nb_edges}>"
 
-    def add_edge(self, node1, node2):
-        """
-        Adds an edge to the graph. Graphs are not oriented, hence an edge is added to the adjacency list of both end nodes. 
-        When adding an edge between two nodes, if one of the ones does not exist it is added to the list of nodes.
-
-        Parameters: 
-        -----------
-        node1: NodeType
-            First end (node) of the edge
-        node2: NodeType
-            Second end (node) of the edge
-        """
-        if node1 not in self.graph:
-            self.graph[node1] = []
-            self.nb_nodes += 1
-            self.nodes.append(node1)
-        if node2 not in self.graph:
-            self.graph[node2] = []
-            self.nb_nodes += 1
-            self.nodes.append(node2)
-
-        self.graph[node1].append(node2)
-        self.graph[node2].append(node1)
-        self.nb_edges += 1
-        self.edges.append((node1, node2))
 
     def bfs(self, state_src_grid, state_dst_grid): 
+        """Answer to question 5 : naive bfs. Uses a dictionnary representing the whole graph.
         """
-        Finds a shortest path from src to dst by BFS.  
-
-        Parameters: 
-        -----------
-        src: NodeType
-            The source node.
-        dst: NodeType
-            The destination node.
-
-        Output: 
-        -------
-        path: list[NodeType] | None
-            The shortest path from src to dst. Returns None if dst is not reachable from src
-        """ 
         src = list_to_tuple(state_src_grid)
         dst = list_to_tuple(state_dst_grid)
         path = []
@@ -124,9 +86,11 @@ class Graph:
             marked.append(current)
             file.pop(0)
         return None
-        
     
+        
     def get_back_path(self, dst, src, dict):
+        """Concludes the bfs : using the dictionnary of parents, get back from the destination
+        to the source and return the path betwenn both"""
         print(dict)
         print(src)
         print(dst)
@@ -137,12 +101,16 @@ class Graph:
             inverse_path.append((dict[active], active))
             active = dict[active]
         return inverse_path
+    
 
+    
     def efficient_bfs(self, src):  
+        """Answer to question 8 : creates the adjacent nodes of the current one, preventing from creating the whole
+        graph, and thus saving memory """
         path = []
-        file = [src] #list of grids
-        marked = [] #list of grids
-        parents = {list_to_tuple(src.state) : -1} #dict of tuples
+        file = [src] 
+        marked = [] 
+        parents = {list_to_tuple(src.state) : -1}
         m = src.m
         n = src.n
         dst = list_to_tuple([list(range(i*n+1, (i+1)*n+1)) for i in range(m)])

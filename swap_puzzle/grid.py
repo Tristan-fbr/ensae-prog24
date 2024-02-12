@@ -180,7 +180,7 @@ class Grid():
 
     def get_grid_swap_case(self, i,j):
 
-        """works with the following method, both return a list of grids, and therefore of attributes m, n, state"""
+        """works with the following method"""
 
         resultat_swap_case=[]
         try:
@@ -218,9 +218,10 @@ class Grid():
 
         return resultat_swap_case
     
-    """this function returns the set of neighbors
-    (grids accessible after a single swap) of a given grid"""
+    
     def get_grid_all_swaps(self):
+        """this function returns the set of neighbors
+        (grids accessible after a single swap) of a given grid"""
         resultat_all_swaps=[]
         for i in range(self.m):
             for j in range(self.n):
@@ -229,10 +230,11 @@ class Grid():
         return(resultat_all_swaps)
     
 
-    """this function creates a dictionary that takes a grid as its key 
-    a grid and associates with it, as a list of values, the set of its neighbors"""
+    
     
     def dict(self):
+        """This function creates a dictionary that takes changes a grid into a tuple to use it as a key
+        and associates to this key a list of tuple (each representing an other grid)"""
         to_be_seen=[self]
         dict_all={}
         while to_be_seen != []:
