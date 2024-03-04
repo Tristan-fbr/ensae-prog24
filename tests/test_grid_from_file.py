@@ -14,3 +14,20 @@ class Test_GridLoading(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+
+#code pour tester la fonction distance
+new_grid = Grid(3,3)
+print(new_grid)
+new_grid.swap((1,1),(1,2))
+new_grid.swap((1,2),(2,2))
+new_grid.swap((0,1),(0,0))
+new_grid.swap((1,0),(1,1))
+new_grid.swap((2,2),(1,2))
+new_grid.swap((1,1),(2,1))
+new_grid.swap((1,1),(0,1))
+new_grid.swap((2,0),(2,1))
+new_grid.swap((2,2),(2,1))
+print(new_grid)
+print(new_grid.distance_grid())

@@ -104,34 +104,45 @@ class Graph:
     
 
     
-    def efficient_bfs(self, src):  
-        """Answer to question 8 : creates the adjacent nodes of the current one, preventing from creating the whole
-        graph, and thus saving memory """
+
+        
+
+    def A(self, src):
         path = []
         file = [src] 
         marked = [] 
-        parents = {list_to_tuple(src.state) : -1}
+        parents = {list_to_tuple(src.state): -1}
         m = src.m
         n = src.n
         dst = list_to_tuple([list(range(i*n+1, (i+1)*n+1)) for i in range(m)])
 
         while file != []:
+            # Sort the file based on distance to destination
+            file.sort(key=lambda state: state.distance_grid())
+
             current = file[0]
             grid_neighbors = Grid.get_grid_all_swaps(current)
+            
             for element in grid_neighbors:
-                if element not in file :
-                    if element not in marked : 
+                if element not in marked:
+                    if element not in file:
+                        # Add the neighbor to the file
                         file.append(element)
                         parents[list_to_tuple(element.state)] = list_to_tuple(current.state)
-                if list_to_tuple(element.state) == dst : 
-                    inverse_path = Graph.get_back_path(self, list_to_tuple(element.state), list_to_tuple(src.state), parents)
-                    if inverse_path != []:
-                        path = inverse_path[::-1]
-                        return path            
+                    elif element.distance_grid < current.distance_grid():
+                        # Update parent if the neighbor has a smaller distance
+                        parents[list_to_tuple(element.state)] = list_to_tuple(current.state)
+                        
+                    if list_to_tuple(element.state) == dst:
+                        inverse_path = Graph.get_back_path(self, list_to_tuple(element.state), list_to_tuple(src.state), parents)
+                        if inverse_path != []:
+                            path = inverse_path[::-1]
+                            return path
+
             marked.append(current)
             file.pop(0)
         return None
-        
+
 
 
     @classmethod
@@ -167,25 +178,7 @@ class Graph:
         return graph
 
 
-    def distance_grid(self):
-        nb_movement=0
-        distance=0
-        for i in range(self.n):
-            for j in range(self.m):
-                if self.state[i][j]% self.m == 0:
-                    true_place_i = self.state[i][j]//self.m - 1
-                    true_place_j = self.m -1
-                else:
-                    true_place_i = self.state[i][j]// self.m
-                    true_place_j = self.state[i][j]% self.m - 1
-                if self.state[i][j] == i*self.n + j + 1:
-                    nb_movement = 0
-                else:
-                    nb_movement= abs(i-true_place_i) + abs(j-true_place_j)
-                distance = distance + nb_movement
-        return distance
 
-"""code pour tester la fonction distance:
 new_grid = Grid(3,3)
 print(new_grid)
 new_grid.swap((1,1),(1,2))
@@ -198,4 +191,22 @@ new_grid.swap((1,1),(0,1))
 new_grid.swap((2,0),(2,1))
 new_grid.swap((2,2),(2,1))
 print(new_grid)
-print(new_grid.distance_grid())"""
+print(new_grid.distance_grid())
+
+
+
+import matplotlib.pyplot as plt
+
+def create_table(data, title=None):
+    plt.figure(figsize=(8, 6))
+    plt.axis('off')
+    if title:
+        plt.title(title)
+    table = plt.table(cellText=data, loc='center')
+    table.auto_set_font_size(False)
+    table.set_fontsize(14)
+    table.scale(1.5, 1.5)
+    plt.show()
+
+
+create_table(data, title='Grid')

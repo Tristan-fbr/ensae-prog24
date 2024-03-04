@@ -229,7 +229,33 @@ class Grid():
                     resultat_all_swaps.append(elt)
         return(resultat_all_swaps)
     
+    def efficient_bfs(self, src):  
+        """Answer to question 8 : creates the adjacent nodes of the current one, preventing from creating the whole
+        graph, and thus saving memory """
+        path = []
+        file = [src] 
+        marked = [] 
+        parents = {list_to_tuple(src.state) : -1}
+        m = src.m
+        n = src.n
+        dst = list_to_tuple([list(range(i*n+1, (i+1)*n+1)) for i in range(m)])
 
+        while file != []:
+            current = file[0]
+            grid_neighbors = Grid.get_grid_all_swaps(current)
+            for element in grid_neighbors:
+                if element not in file :
+                    if element not in marked : 
+                        file.append(element)
+                        parents[list_to_tuple(element.state)] = list_to_tuple(current.state)
+                if list_to_tuple(element.state) == dst : 
+                    inverse_path = Graph.get_back_path(self, list_to_tuple(element.state), list_to_tuple(src.state), parents)
+                    if inverse_path != []:
+                        path = inverse_path[::-1]
+                        return path            
+            marked.append(current)
+            file.pop(0)
+        return None
     
     
     def dict(self):
@@ -249,4 +275,31 @@ class Grid():
                     to_be_seen.append(elt)
         return dict_all
 
-    
+    def distance_grid(self):
+        nb_movement=0
+        distance=0
+        for i in range(self.n):
+            for j in range(self.m):
+                if self.state[i][j]% self.m == 0:
+                    true_place_i = self.state[i][j]//self.m - 1
+                    true_place_j = self.m -1
+                else:
+                    true_place_i = self.state[i][j]// self.m
+                    true_place_j = self.state[i][j]% self.m - 1
+                if self.state[i][j] == i*self.n + j + 1:
+                    nb_movement = 0
+                else:
+                    nb_movement= abs(i-true_place_i) + abs(j-true_place_j)
+                distance = distance + nb_movement
+        return distance
+
+
+
+    def random_grid(m,n):
+        initial_state = []
+        # Générer une liste de tous les nombres possibles entre 1 et n*m
+        all_numbers = list(range(1, m * n + 1))
+        # Mélanger aléatoirement les nombres
+        random.shuffle(all_numbers)
+        initial_state = [all_numbers[i*n:(i+1)*n] for i in range(m)]            
+        return initial_state.state
