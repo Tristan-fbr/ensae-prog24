@@ -3,7 +3,7 @@ This is the grid module. It contains the Grid class and its associated methods.
 """
 
 import random
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 from copy import deepcopy
 
 
@@ -41,7 +41,7 @@ class Grid():
         n: int
             Number of columns in the grid
         initial_state: list[list[int]]
-            The intiail state of the grid. Default is empty (then the grid is created sorted).
+            The initial state of the grid. Default is empty (then the grid is created sorted).
         """
         self.m = m
         self.n = n
@@ -66,7 +66,7 @@ class Grid():
 
     def is_sorted(self):
         """
-        Checks is the current state of the grid is sorte and returns the answer as a boolean.
+        Checks is the current state of the grid is sorted and returns the answer as a boolean.
         """
         nb_right_cells=0
         for i in range (0, self.m):
@@ -114,8 +114,6 @@ class Grid():
         #in case the swap is not allowed
         if error == 1: 
             raise Exception("Swap not allowed")
-
-
 
 
     def swap_seq(self, cell_pair_list):
@@ -178,7 +176,7 @@ class Grid():
         return grid
 
 
-    def get_grid_swap_case(self, i,j):
+    def get_grid_swap_case(self, i, j):
 
         """works with the following method"""
 
@@ -229,36 +227,9 @@ class Grid():
                     resultat_all_swaps.append(elt)
         return(resultat_all_swaps)
     
-    def efficient_bfs(self, src):  
-        """Answer to question 8 : creates the adjacent nodes of the current one, preventing from creating the whole
-        graph, and thus saving memory """
-        path = []
-        file = [src] 
-        marked = [] 
-        parents = {list_to_tuple(src.state) : -1}
-        m = src.m
-        n = src.n
-        dst = list_to_tuple([list(range(i*n+1, (i+1)*n+1)) for i in range(m)])
 
-        while file != []:
-            current = file[0]
-            grid_neighbors = Grid.get_grid_all_swaps(current)
-            for element in grid_neighbors:
-                if element not in file :
-                    if element not in marked : 
-                        file.append(element)
-                        parents[list_to_tuple(element.state)] = list_to_tuple(current.state)
-                if list_to_tuple(element.state) == dst : 
-                    inverse_path = Graph.get_back_path(self, list_to_tuple(element.state), list_to_tuple(src.state), parents)
-                    if inverse_path != []:
-                        path = inverse_path[::-1]
-                        return path            
-            marked.append(current)
-            file.pop(0)
-        return None
-    
-    
     def dict(self):
+        #NB : with a grid bigger than 2 x 2, takes too much time
         """This function creates a dictionary that takes changes a grid into a tuple to use it as a key
         and associates to this key a list of tuple (each representing an other grid)"""
         to_be_seen=[self]
@@ -274,19 +245,20 @@ class Grid():
                 if elt not in to_be_seen and list_to_tuple(elt.state) not in dict_all.keys():
                     to_be_seen.append(elt)
         return dict_all
+    
 
     def distance_grid(self):
         nb_movement=0
         distance=0
-        for i in range(self.n):
-            for j in range(self.m):
-                if self.state[i][j]% self.m == 0:
-                    true_place_i = self.state[i][j]//self.m - 1
-                    true_place_j = self.m -1
+        for i in range(self.m):
+            for j in range(self.n):
+                if self.state[i][j]% self.n == 0:
+                    true_place_i = self.state[i][j]//self.n - 1
+                    true_place_j = self.n -1
                 else:
-                    true_place_i = self.state[i][j]// self.m
-                    true_place_j = self.state[i][j]% self.m - 1
-                if self.state[i][j] == i*self.n + j + 1:
+                    true_place_i = self.state[i][j]// self.n
+                    true_place_j = self.state[i][j]% self.n - 1
+                if self.state[i][j] == i*self.m + j + 1:
                     nb_movement = 0
                 else:
                     nb_movement= abs(i-true_place_i) + abs(j-true_place_j)
@@ -295,11 +267,13 @@ class Grid():
 
 
 
-    def random_grid(m,n):
+    def random_grid(self):
+        m = self.m
+        n = self.n
         initial_state = []
         # Générer une liste de tous les nombres possibles entre 1 et n*m
         all_numbers = list(range(1, m * n + 1))
         # Mélanger aléatoirement les nombres
         random.shuffle(all_numbers)
         initial_state = [all_numbers[i*n:(i+1)*n] for i in range(m)]            
-        return initial_state.state
+        return initial_state

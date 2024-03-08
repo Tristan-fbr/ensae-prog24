@@ -3,16 +3,37 @@ from solver import Solver
 from graph import Graph
 
 
-g = Grid(3, 1)
+
+
+g = Grid(3,2)
+print(g)
+
+h_state = Grid.random_grid(g)
+#print(h_state)
+h = Grid(3,2,h_state )
+print(h)
+
+
+i = Graph({3 : 1, 4 : 2})
+print(i)
+"""
+result=Graph.A_star(i, h)
+print("A*", result)
+result_bis = Graph.efficient_bfs(i, h)
+print('BFS', result_bis)
+if result == result_bis : 
+    print('True')"""
+
+"""
 aim = Grid(3, 1)
-Grid.swap(g, (1, 0), (0, 0))
+
 print(g)
 #Grid.swap_seq(g, [((0,2), (1,2)),((0,2), (0,1))])
 #print(g)
-graph = Grid.dict(g)
-i = Graph(graph)
 #print(Graph.bfs(i, g.state, aim.state))
-print(Graph.efficient_bfs(i, g))
+Graph.A(i, g)
+"""
+
 
 
 
@@ -41,4 +62,38 @@ print(g)
 
 g = Graph.graph_from_file(file_name)
 print(Graph.bfs(g, 4, 3))
+"""
+
+"""
+new_grid = Grid(3,3)
+print(new_grid)
+new_grid.swap((1,1),(1,2))
+new_grid.swap((1,2),(2,2))
+new_grid.swap((0,1),(0,0))
+new_grid.swap((1,0),(1,1))
+new_grid.swap((2,2),(1,2))
+new_grid.swap((1,1),(2,1))
+new_grid.swap((1,1),(0,1))
+new_grid.swap((2,0),(2,1))
+new_grid.swap((2,2),(2,1))
+print(new_grid)
+print(new_grid.distance_grid())
+
+
+
+import matplotlib.pyplot as plt
+
+def create_table(data, title=None):
+    plt.figure(figsize=(8, 6))
+    plt.axis('off')
+    if title:
+        plt.title(title)
+    table = plt.table(cellText=data, loc='center')
+    table.auto_set_font_size(False)
+    table.set_fontsize(14)
+    table.scale(1.5, 1.5)
+    plt.show()
+
+
+create_table(data, title='Grid')
 """
