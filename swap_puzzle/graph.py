@@ -4,6 +4,8 @@ This is the graph module. It contains a minimalistic Graph class.
 
 from grid import Grid
 import heapq as hpq
+import time
+
 
 def list_to_tuple(liste):
     tuple_result = []
@@ -11,27 +13,99 @@ def list_to_tuple(liste):
         tuple_result.append(tuple(inner_list))
     return tuple(tuple_result)
 
+
 class Graph:
     """
     A class representing undirected graphs as adjacency lists. 
 
     Attributes: 
+    -----------
+    nodes: NodeType
+        A list of nodes. Nodes can be of any immutable type, e.g., integer, float, or string.
+        We will usually use a list of integers 1, ..., n.
     graph: dict
         A dictionnary that contains the adjacency list of each node in the form
-        graph[node] = [neighbor1, neighbor2, ...
+        graph[node] = [neighbor1, neighbor2, ...]
+    nb_nodes: int
+        The number of nodes.
+    nb_edges: int
+        The number of edges. 
+    edges: list[tuple[NodeType, NodeType]]
+        The list of all edges
     """
 
-    def __init__(self, dict):
+    def __init__(self, dictio, nodes=[]):
+        """
+        Initializes the graph with a set of nodes, and no edges. 
 
-        self.graph = dict
+        Parameters: 
+        -----------
+        nodes: list, optional
+            A list of nodes. Default is empty.
+        """
+        self.nodes = nodes 
+        if dict == {}:
+            self.graph = dict([(n, []) for n in nodes])
+        else : 
+            self.graph = dictio
+        self.nb_nodes = len(nodes)
+        self.nb_edges = 0
+        self.edges = []
+        print('nodes', type(self.nodes))
+        print('graph', self.graph)
+
+        
+    def __str__(self):
+        """
+        Prints the graph as a list of neighbors for each node (one per line)
+        """
+        if not self.graph:
+            output = "The graph is empty"            
+        else:
+            output = f"The graph has {self.nb_nodes} nodes and {self.nb_edges} edges.\n"
+            for source, destination in self.graph.items():
+                output += f"{source}-->{destination}\n"
+        return output
+
+    def __repr__(self): 
+        """
+        Returns a representation of the graph with number of nodes and edges.
+        """
+        return f"<graph.Graph: nb_nodes={self.nb_nodes}, nb_edges={self.nb_edges}>"
+
+    def add_edge(self, node1, node2):
+        """
+        Adds an edge to the graph. Graphs are not oriented, hence an edge is added to the adjacency list of both end nodes. 
+        When adding an edge between two nodes, if one of the ones does not exist it is added to the list of nodes.
+
+        Parameters: 
+        -----------
+        node1: NodeType
+            First end (node) of the edge
+        node2: NodeType
+            Second end (node) of the edge
+        """
+        if node1 not in self.graph:
+            self.graph[node1] = []
+            self.nb_nodes += 1
+            self.nodes.append(node1)
+        if node2 not in self.graph:
+            self.graph[node2] = []
+            self.nb_nodes += 1
+            self.nodes.append(node2)
+
+        self.graph[node1].append(node2)
+        self.graph[node2].append(node1)
+        self.nb_edges += 1
+        self.edges.append((node1, node2))
 
 
-    def bfs(self, state_src_grid, state_dst_grid): 
+    def bfs(self, src, dst): 
         """
         Answer to question 5 : naive BFS. Uses a dictionnary representing the whole graph.
+
         """
-        src = list_to_tuple(state_src_grid.state)
-        dst = list_to_tuple(state_dst_grid.state)
+        beginning = time.time()
         path = []
         file = [src]
         marked = []
@@ -48,9 +122,13 @@ class Graph:
                 if element == dst : 
                     inverse_path = Graph.get_back_path(self, element, src, parents)
                     path = inverse_path[::-1]
+                    end = time.time()
+                    print(end - beginning)
                     return path
             marked.append(current)
             file.pop(0)
+        end = time.time()
+        print(end - beginning)
         return None
     
 
@@ -69,6 +147,7 @@ class Graph:
         """
         Answer to question 8 : creates the adjacent nodes of the current one, preventing from creating the whole
         graph, and thus saving memory and time"""
+        beginning = time.time()
         file = [src] 
         marked = [] 
         parents = {list_to_tuple(src.state) : -1}
@@ -94,9 +173,12 @@ class Graph:
                     parents[list_to_tuple(element.state)] = list_to_tuple(current.state)
                 if list_to_tuple(element.state) == dst : 
                     inverse_path = Graph.get_back_path(self, list_to_tuple(element.state), list_to_tuple(src.state), parents)
-                    if inverse_path != []:
-                        return(inverse_path[::-1])
+                    end = time.time()
+                    print(end - beginning)
+                    return(inverse_path[::-1])
             marked.append(current)
+        end = time.time()
+        print(end - beginning)
         return None
         
 
@@ -108,6 +190,7 @@ class Graph:
         mark sera une liste des 2uplets[1], soit des grilles. path est une liste qui double
         file, elle est impliquée seulement pour filtrer les éléments déjà en vue et ne pas recalculer la distance 
         de tous les nouveaux éléments créés """
+        beginning = time.time()
         file = [] 
         marked = [] 
         parents = {list_to_tuple(src.state): -1}
@@ -142,11 +225,13 @@ class Graph:
                         
                 if list_to_tuple(element.state) == dst:
                     inverse_path = Graph.get_back_path(self, list_to_tuple(element.state), list_to_tuple(src.state), parents)
-                    if inverse_path != []:
-                        return inverse_path[::-1]
+                    end = time.time()
+                    print(end - beginning)
+                    return inverse_path[::-1]
             marked.append(current[3].state)
+        end = time.time()
+        print(end - beginning)
         return None
-
 
     @classmethod
     def graph_from_file(cls, file_name):
@@ -170,7 +255,10 @@ class Graph:
         """
         with open(file_name, "r") as file:
             n, m = map(int, file.readline().split())
-            graph = Graph(range(1, n+1))
+            nodes = []
+            for i in range(1, n+1):
+                nodes.append(i)
+            graph = Graph({}, nodes)
             for _ in range(m):
                 edge = list(map(int, file.readline().split()))
                 if len(edge) == 2:
@@ -179,5 +267,4 @@ class Graph:
                 else:
                     raise Exception("Format incorrect")
         return graph
-
 

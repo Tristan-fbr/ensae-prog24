@@ -4,23 +4,26 @@ from graph import Graph
 
 
 
-
-g = Grid(3,2)
-print(g)
-
-h_state = Grid.random_grid(g)
-#print(h_state)
-h = Grid(3,2,h_state )
-print(h)
-
-
-i = Graph({3 : 1, 4 : 2})
-print(i)
 """
+g = Grid(3,2)
+#print(g)
+
+h = Grid.random_grid(g)
+#print(h_state)
+print(type(h))
+print("h", h)
+
+
+i = Graph({})
 result=Graph.A_star(i, h)
 print("A*", result)
 result_bis = Graph.efficient_bfs(i, h)
 print('BFS', result_bis)
+
+
+
+
+
 if result == result_bis : 
     print('True')"""
 
@@ -47,6 +50,10 @@ swaps_solution = Solver.get_solution(s)
 print("solutions", swaps_solution)
 print(g)
 print(Grid.is_sorted(g))
+g = Grid.grid_from_file(file_name)
+print(g)
+"""
+
 
 
 data_path = "C:/Users/cfrou/OneDrive/Bureau/Projet programmation/ensae-prog24/input/"
@@ -56,13 +63,9 @@ file_name = data_path + "graph2.in"
 #print(file_name)
 
 
-g = Grid.grid_from_file(file_name)
-print(g)
-
-
 g = Graph.graph_from_file(file_name)
+print(g)
 print(Graph.bfs(g, 4, 3))
-"""
 
 """
 new_grid = Grid(3,3)

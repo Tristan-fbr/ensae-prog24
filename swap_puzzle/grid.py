@@ -9,10 +9,15 @@ from copy import deepcopy
 
 #transforms a list into a tuple (a hashable object)
 def list_to_tuple(liste):
+    """
+    Side function having nothing to do with grids. 
+    Turns a list into a tuple.
+    """
     tuple_result = []
     for inner_list in liste:
         tuple_result.append(tuple(inner_list))
     return tuple(tuple_result)
+
 
 class Grid():
     """
@@ -49,6 +54,7 @@ class Grid():
             initial_state = [list(range(i*n+1, (i+1)*n+1)) for i in range(m)]            
         self.state = initial_state
 
+
     def __str__(self): 
         """
         Prints the state of the grid as text.
@@ -58,11 +64,29 @@ class Grid():
             output += f"{self.state[i]}\n"
         return output
 
+
     def __repr__(self): 
         """
         Returns a representation of the grid with number of rows and columns.
         """
         return f"<grid.Grid: m={self.m}, n={self.n}>"
+    
+
+    def random_grid(self):
+        """
+        Using the dimension of a grid, returns a random grid
+        """
+        m = self.m
+        n = self.n
+        initial_state = []
+        # Create a list of all possible numbers between 1 and n*m
+        all_numbers = list(range(1, m * n + 1))
+        # shuffle randomly those numbers
+        random.shuffle(all_numbers)
+        initial_state = [all_numbers[i*n:(i+1)*n] for i in range(m)]
+        random_grid = Grid(m, n, initial_state)          
+        return random_grid
+
 
     def is_sorted(self):
         """
@@ -71,11 +95,8 @@ class Grid():
         nb_right_cells=0
         for i in range (0, self.m):
             for j in range (0, self.n):
-                """print("i, j", i, j)
-                print("contenu, attendu", self.state[i][j], i*self.n + j + 1)"""
                 if self.state[i][j] == i*self.n + j + 1:
                     nb_right_cells = nb_right_cells+ 1
-                    #print("nb", nb_right_cells)
         if nb_right_cells == self.n*self.m:
             return True
         else :
@@ -131,7 +152,11 @@ class Grid():
             cell2 = element[1]
             Grid.swap(self, cell1, cell2)
 
+
     def graphic_rep(self):
+        """
+        Creates a graphic representation of the grid using matplotlib
+        """
         #defines the grid : number of columns, number of lines
         fig, ax = plt.subplots()
         ax.set_xticks(range(self.n+1))
@@ -146,6 +171,7 @@ class Grid():
         #shows the grid
         ax.set_aspect('equal')
         plt.show()
+
 
     @classmethod
     def grid_from_file(cls, file_name): 
@@ -177,8 +203,18 @@ class Grid():
 
 
     def get_grid_swap_case(self, i, j):
-
-        """works with the following method"""
+        """
+        Using a grid and a cell, returns all the possible grids with only one move of the cell.
+        
+        Parameters : 
+        ------------
+        grid : Grid
+            The grid.
+        i : int
+            The line number of the cell. 
+        j : int
+            The column number of the cell. 
+        """
 
         resultat_swap_case=[]
         try:
@@ -218,8 +254,10 @@ class Grid():
     
     
     def get_grid_all_swaps(self):
-        """this function returns the set of neighbors
-        (grids accessible after a single swap) of a given grid"""
+        """
+        Returns the set of neighbors (grids accessible after a single swap) of a grid
+        """
+
         resultat_all_swaps=[]
         for i in range(self.m):
             for j in range(self.n):
@@ -230,24 +268,42 @@ class Grid():
 
     def dict(self):
         #NB : with a grid bigger than 2 x 2, takes too much time
-        """This function creates a dictionary that takes changes a grid into a tuple to use it as a key
-        and associates to this key a list of tuple (each representing an other grid)"""
+        """
+        Changes a grid into a tuple then creates a dictionary used by the naive BFS.
+        
+        Parameters :
+        ------------
+        self : Grid
+            The grid. 
+
+        Output : 
+        -------
+        dict_all : ditc(tuple : list[tuple])
+            The keys are tuples representing the state of the grid. 
+            The lists contain all the state of the grids which are neighbours of the key.
+        """
+
         to_be_seen=[self]
         dict_all={}
         while to_be_seen != []:
             current = to_be_seen.pop(0)
-            all_neighbors= Grid.get_grid_all_swaps(current)
-            tuple_neighbors = []
-            for element in all_neighbors:
-                tuple_neighbors.append(list_to_tuple(element.state))
-            dict_all[list_to_tuple(current.state)] = tuple_neighbors
-            for elt in all_neighbors:
+            all_neighbours= Grid.get_grid_all_swaps(current)
+            tuple_neighbours = []
+            for element in all_neighbours:
+                tuple_neighbours.append(list_to_tuple(element.state))
+            dict_all[list_to_tuple(current.state)] = tuple_neighbours
+            for elt in all_neighbours:
                 if elt not in to_be_seen and list_to_tuple(elt.state) not in dict_all.keys():
                     to_be_seen.append(elt)
         return dict_all
     
 
     def distance_grid(self):
+        """
+        Returns the distance between a grid and the sorted grid. 
+        Used by A* to determine the heuristic of the grid.
+        """
+        
         nb_movement=0
         distance=0
         for i in range(self.m):
@@ -264,16 +320,3 @@ class Grid():
                     nb_movement= abs(i-true_place_i) + abs(j-true_place_j)
                 distance = distance + nb_movement
         return distance
-
-
-
-    def random_grid(self):
-        m = self.m
-        n = self.n
-        initial_state = []
-        # Générer une liste de tous les nombres possibles entre 1 et n*m
-        all_numbers = list(range(1, m * n + 1))
-        # Mélanger aléatoirement les nombres
-        random.shuffle(all_numbers)
-        initial_state = [all_numbers[i*n:(i+1)*n] for i in range(m)]            
-        return initial_state
