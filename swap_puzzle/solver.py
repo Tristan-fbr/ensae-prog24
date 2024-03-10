@@ -1,4 +1,5 @@
 from grid import Grid
+import time
 
 class Solver(): 
     """
@@ -17,8 +18,15 @@ class Solver():
         
     
     def get_solution(self):
-        """We proceed step by step, i.e. cell by cell beginning at the top left and continuing by column. 
-        For each step we define the targeted cell (the place where the number should be) and the right cell (the place where the number is)"""
+        """
+        Finds a naive solution to the swap puzzle.
+
+        Output : 
+        -------
+        swaps_solution : list
+            A list of swaps which, if used by the swap_seq function, will returns an ordered grid. 
+        """
+        beginning = time.time()
         swaps_solution = []
         i, j = 0, 0 #i and j the coordinates of the targeted cell
         
@@ -32,7 +40,6 @@ class Solver():
                         if self.state[a][b] == k:
                             ik = a
                             jk = b
-                "print(i, j, k, ik, jk)"
                 #adjusting lines
                 while ik < i :
                     swaps_solution.append(((ik, jk), (ik + 1, jk)))
@@ -47,19 +54,10 @@ class Solver():
                     swaps_solution.append(((ik, jk), (ik , jk - 1)))
                     Solver.swap(self,(ik, jk), (ik , jk - 1))
                     jk = jk - 1
-                print(swaps_solution)
-                
-                print("modified list", self.state)
+        end = time.time()
+        print(beginning - end)
         return(swaps_solution)
             
-
-        """
-        Solves the grid and returns the sequence of swaps at the format 
-        [((i1, j1), (i2, j2)), ((i1', j1'), (i2', j2')), ...]. 
-        """
-        # TODO: implement this function (and remove the line "raise NotImplementedError").
-        # NOTE: you can add other methods and subclasses as much as necessary. The only thing imposed is the format of the solution returned.
-        raise NotImplementedError
     
     def swap(self, cell1, cell2):
         """

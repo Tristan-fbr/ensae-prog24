@@ -3,7 +3,7 @@ This is the grid module. It contains the Grid class and its associated methods.
 """
 
 import random
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 from copy import deepcopy
 
 
@@ -162,12 +162,10 @@ class Grid():
         ax.set_xticks(range(self.n+1))
         ax.set_yticks(range(self.m+1))
         ax.grid()
-
         #fills in the cells of the grid
         for i in range(1, self.m+1):
             for j in range(1, self.n+1):
                 ax.text(j-0.5, self.m-i+0.5, str(self.state[i-1][j-1]))
-
         #shows the grid
         ax.set_aspect('equal')
         plt.show()
@@ -215,7 +213,6 @@ class Grid():
         j : int
             The column number of the cell. 
         """
-
         resultat_swap_case=[]
         try:
             self.swap((i,j),(i+1,j))
@@ -241,7 +238,6 @@ class Grid():
         except:
             pass
 
-
         try:
             self.swap((i,j),(i,j-1))
             new_grid = Grid(self.m, self.n, initial_state=deepcopy(self.state))
@@ -257,17 +253,15 @@ class Grid():
         """
         Returns the set of neighbors (grids accessible after a single swap) of a grid
         """
-
         resultat_all_swaps=[]
         for i in range(self.m):
             for j in range(self.n):
-                for elt in self.get_grid_swap_case(i,j):
+                for elt in Grid.get_grid_swap_case(self, i,j):
                     resultat_all_swaps.append(elt)
         return(resultat_all_swaps)
     
 
     def dict(self):
-        #NB : with a grid bigger than 2 x 2, takes too much time
         """
         Changes a grid into a tuple then creates a dictionary used by the naive BFS.
         
@@ -282,7 +276,6 @@ class Grid():
             The keys are tuples representing the state of the grid. 
             The lists contain all the state of the grids which are neighbours of the key.
         """
-
         to_be_seen=[self]
         dict_all={}
         while to_be_seen != []:
@@ -303,7 +296,6 @@ class Grid():
         Returns the distance between a grid and the sorted grid. 
         Used by A* to determine the heuristic of the grid.
         """
-        
         nb_movement=0
         distance=0
         for i in range(self.m):

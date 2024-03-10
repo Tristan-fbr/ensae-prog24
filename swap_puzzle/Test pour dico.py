@@ -1,10 +1,5 @@
 from grid import Grid
 import time
 
-a = 0
-debut = time.time()
-for i in range(0, 1000000):
-    a +=1
-fin = time.time()
-
-print(fin - debut)
+g = Grid(3, 2)
+print(Grid.get_grid_all_swaps(g))
